@@ -11,7 +11,7 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "indent": ["error", 4],
+    "indent": ["error", 2],
     "eol-last": ["error", "always"],
     "comma-dangle": ["error", "always-multiline"],
     "no-trailing-spaces": "error",
