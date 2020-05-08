@@ -1,56 +1,63 @@
-import "reflect-metadata";
-import Boom from "@hapi/boom";
-import { Service } from "typedi";
-import { getConnection } from "typeorm";
+import 'reflect-metadata';
+import Boom from '@hapi/boom';
+import { Service } from 'typedi';
+import { getConnection } from 'typeorm';
 
-import { ToDoList } from "../models/ToDoList";
+import { ToDoList } from '../models/ToDoList';
 
 @Service()
 export class ToDoListService {
-    public async getToDoListsForUser(userId: string, offset: number, limit: number): Promise<[ToDoList[], number]> {
-        const toDoListRepo = getConnection().getRepository(ToDoList);
+  public async getToDoListsForUser(
+    userId: string,
+    offset: number,
+    limit: number,
+  ): Promise<[ToDoList[], number]> {
+    const toDoListRepo = getConnection().getRepository(ToDoList);
 
-        return toDoListRepo.findAndCount({
-            skip: offset,
-            take: limit,
-            where: { userId },
-        });
+    return toDoListRepo.findAndCount({
+      skip: offset,
+      take: limit,
+      where: { userId },
+    });
+  }
+
+  public async getToDoList(toDoListId: string): Promise<ToDoList> {
+    const toDoListRepo = getConnection().getRepository(ToDoList);
+
+    const list = await toDoListRepo.findOne({
+      where: { id: toDoListId },
+    });
+
+    if (!list) {
+      throw Boom.notFound('Todo list not found');
     }
 
-    public async getToDoList(toDoListId: string): Promise<ToDoList> {
-        const toDoListRepo = getConnection().getRepository(ToDoList);
+    return list;
+  }
 
-        const list = await toDoListRepo.findOne({
-            where: { id: toDoListId },
-        });
+  public async createToDoListForUser(
+    userId: string,
+    title: string,
+  ): Promise<ToDoList> {
+    const toDoListRepo = getConnection().getRepository(ToDoList);
 
-        if (!list) {
-            throw Boom.notFound('Todo list not found');
-        }
+    const toDoList = toDoListRepo.create({
+      userId,
+      title,
+    });
 
-        return list;
-    }
+    return toDoListRepo.save(toDoList);
+  }
 
-    public async createToDoListForUser(userId: string, title: string): Promise<ToDoList> {
-        const toDoListRepo = getConnection().getRepository(ToDoList);
+  public async updateToDoList(toDoList: ToDoList): Promise<ToDoList> {
+    const toDoListRepo = getConnection().getRepository(ToDoList);
 
-        const toDoList = toDoListRepo.create({
-            userId,
-            title,
-        });
+    return toDoListRepo.save(toDoList, { reload: true });
+  }
 
-        return toDoListRepo.save(toDoList);
-    }
+  public async removeToDoList(toDoList: ToDoList): Promise<ToDoList> {
+    const toDoListRepo = getConnection().getRepository(ToDoList);
 
-    public async updateToDoList(toDoList: ToDoList): Promise<ToDoList> {
-        const toDoListRepo = getConnection().getRepository(ToDoList);
-
-        return toDoListRepo.save(toDoList, { reload: true });
-    }
-
-    public async removeToDoList(toDoList: ToDoList): Promise<ToDoList> {
-        const toDoListRepo = getConnection().getRepository(ToDoList);
-
-        return toDoListRepo.remove(toDoList);
-    }
+    return toDoListRepo.remove(toDoList);
+  }
 }
