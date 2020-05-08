@@ -80,15 +80,13 @@ export class ToDoItemController {
       throw Boom.forbidden('You do not have access to this resource');
     }
     const _items = await this.toDoItemService.addTodoItems(todolistId, items);
-    return res
-      .status(201)
-      .send(
-        _items.map((item) => ({
-          id: item.id,
-          completed: item.completed,
-          description: item.description,
-        })),
-      );
+    return res.status(201).send(
+      _items.map((item) => ({
+        id: item.id,
+        completed: item.completed,
+        description: item.description,
+      })),
+    );
   }
 
   @Patch('/items')

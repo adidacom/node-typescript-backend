@@ -8,66 +8,56 @@ import { User } from '../models/User';
 @Service()
 export class UserService {
   public async getAllUsers(
-    offset: number,
-    limit: number,
-    select: (keyof User)[] = ['id', 'username'],
+    select: (keyof User)[] = ['id', 'email'],
   ): Promise<[User[], number]> {
     const userRepo = getConnection().getRepository(User);
 
     return userRepo.findAndCount({
-      take: limit,
-      skip: offset,
       select,
     });
   }
 
-  public async getUser(username: string): Promise<User> {
+  public async getUser(userId: string): Promise<User> {
     const userRepo = getConnection().getRepository(User);
 
     const user = await userRepo.findOne({
-      where: [{ id: username }, { username }],
+      where: [{ id: userId }],
     });
 
     if (!user) {
-      throw Boom.notFound('Could not find a user with this username or id');
+      throw Boom.notFound('Could not find a user with this userId');
     }
 
     return user;
   }
 
-  public async getUserByAPIKey(apiKey: string): Promise<User> {
+  public async getUserWithEmail(email: string): Promise<User> {
     const userRepo = getConnection().getRepository(User);
 
     const user = await userRepo.findOne({
-      where: { apiKey },
+      where: [{ email }],
     });
 
     if (!user) {
-      throw Boom.notFound('Could not find a user with this API Key');
+      throw Boom.notFound('Could not find a user with this userId');
     }
 
     return user;
   }
 
-  public async getUserAPIKey(username: string): Promise<string> {
-    const user = await this.getUser(username);
-
-    return user.apiKey;
-  }
-
-  public async createUser(username: string): Promise<User> {
+  public async createUser(email: string, password: string): Promise<User> {
     const userRepo = getConnection().getRepository(User);
 
-    const user = userRepo.create({ username });
+    const user = userRepo.create({ email, password });
     await userRepo.save(user);
 
     return user;
   }
 
-  public async deleteUser(username: string): Promise<void> {
+  public async deleteUser(userId: string): Promise<void> {
     const userRepo = getConnection().getRepository(User);
 
-    const user = await this.getUser(username);
+    const user = await this.getUser(userId);
 
     await userRepo.delete(user);
   }

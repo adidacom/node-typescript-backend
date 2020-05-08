@@ -5,7 +5,8 @@ import { User } from '../models/User';
 export class Seed1580070688033 implements MigrationInterface {
   public async up(): Promise<void> {
     const user = getRepository(User).create({
-      username: 'user1',
+      email: 'user1@gmail.com',
+      password: '1234567',
     });
 
     await getRepository(User).save(user);
@@ -13,7 +14,7 @@ export class Seed1580070688033 implements MigrationInterface {
 
   public async down(): Promise<void> {
     const user = await getRepository(User).findOne({
-      where: { username: 'user1' },
+      where: { email: 'user1@gmail.com' },
     });
 
     await getRepository(User).remove(user);

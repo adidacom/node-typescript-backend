@@ -40,6 +40,11 @@ const conf = convict({
       env: 'DB_PASSWORD',
     },
   },
+  jwtSecret: {
+    format: '*',
+    default: 'JWT_SECRET',
+    env: 'JWT_SECRET',
+  },
 });
 
 conf.validate({ allowed: 'strict' });
