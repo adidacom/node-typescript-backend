@@ -33,7 +33,7 @@ export class User {
     this.deleted = true;
   }
 
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column('text')

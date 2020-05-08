@@ -1,17 +1,28 @@
 components:
     securitySchemes:
-      APIKeyHeader:
-        type: apiKey
-        in: header
-        name: Authorization
-      APIKeyQuery:
-        type: apiKey
-        in: query
-        name: apikey
+      bearerAuth:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT
     schemas:
         Message:
           properties:
             message:
+              type: string
+        User:
+          required:
+            - id
+            - email
+            - token
+          properties:
+            id:
+              description: User Id
+              type: string
+            email:
+              description: User Email
+              type: string
+            token:
+              description: Bearer Token
               type: string
         Todolist:
           required:

@@ -18,6 +18,94 @@ paths:
                 message: Hello World
         500:
           $ref: '#/components/responses/InternalError'
+  /signup:
+    post:
+      tags:
+        - Auth
+      summary: Sign Up
+      description: User Sign Up
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              properties:
+                email:
+                  description: Email
+                  type: string
+                  minimum: 6
+                  maximum: 255
+                password:
+                  description: Password
+                  type: string
+                  minimum: 6
+                  maximum: 255
+                repeatPassword:
+                  description: Repeat Password
+                  type: string
+                  minimum: 6
+                  maximum: 255
+      responses:
+        201:
+          description: User Registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                id: '123456'
+                email: user1@gmail.com
+                token: abc123
+        400:
+          $ref: '#/components/responses/BadRequestError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        500:
+          $ref: '#/components/responses/InternalError'
+  /signin:
+    post:
+      tags:
+        - Auth
+      summary: Sign In
+      description: User Sign In
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+              properties:
+                email:
+                  description: Email
+                  type: string
+                  minimum: 6
+                  maximum: 255
+                password:
+                  description: Password
+                  type: string
+                  minimum: 6
+                  maximum: 255
+      responses:
+        201:
+          description: User Signed In
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                id: '123456'
+                email: user1@gmail.com
+        400:
+          $ref: '#/components/responses/BadRequestError'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+        500:
+          $ref: '#/components/responses/InternalError'
   /todos:
     get:
       tags:
@@ -25,8 +113,7 @@ paths:
       summary: List
       description: Returns paginated Todo list
       security:
-        - APIKeyHeader: []
-        - APIKeyQuery: []
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
@@ -54,8 +141,7 @@ paths:
       summary: Create
       description: Create a Todo list with Todo items
       security:
-        - APIKeyHeader: []
-        - APIKeyQuery: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -101,8 +187,7 @@ paths:
       summary: Update
       description: Update a Todo list
       security:
-        - APIKeyHeader: []
-        - APIKeyQuery: []
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/todolistId'
       requestBody:
@@ -145,8 +230,7 @@ paths:
       summary: Delete
       description: Delete a Todo list
       security:
-        - APIKeyHeader: []
-        - APIKeyQuery: []
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/todolistId'
       responses:
@@ -169,8 +253,7 @@ paths:
       summary: List
       description: Returns paginated Todo items for a Todo list
       security:
-        - APIKeyHeader: []
-        - APIKeyQuery: []
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/offset'
         - $ref: '#/components/parameters/limit'
@@ -201,8 +284,7 @@ paths:
       summary: Bulk Create
       description: Create Todo items in bulk for a Todo list
       security:
-        - APIKeyHeader: []
-        - APIKeyQuery: []
+        - bearerAuth: []
       parameters:
         - $ref: '#/components/parameters/todolistId'
       requestBody:
@@ -249,8 +331,7 @@ paths:
       summary: Bulk Update
       description: Update Todo items in bulk
       security:
-        - APIKeyHeader: []
-        - APIKeyQuery: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
@@ -289,8 +370,7 @@ paths:
       summary: Bulk Delete
       description: Delete Todo items in bulk
       security:
-        - APIKeyHeader: []
-        - APIKeyQuery: []
+        - bearerAuth: []
       requestBody:
         required: true
         content:
