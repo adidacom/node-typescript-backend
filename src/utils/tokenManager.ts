@@ -2,7 +2,6 @@ import * as jwt from 'jsonwebtoken';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 import config from '../config';
-import { UserService } from '../services/UserService';
 
 const JWTSECRET = config.jwtSecret;
 
@@ -29,52 +28,18 @@ export class TokenManagement {
     this._currentUser = value;
   }
 
-  public static async syncUser(id: string) {
-    this.currentUser = await UserService.getUser(id).catch((err) => {
-      console.error('Error Syncing user with API at TokenManager');
-      console.error(err);
-      throw err;
-    });
-    this.currentUser = this.currentUser.data;
-  }
-
   public static generateToken(userId: string) {
     this.token = jwt.sign({ data: userId }, JWTSECRET, {
       expiresIn: '2 hours',
     });
-
-    this.syncUser(userId);
     return this.token;
   }
 
-  public static generateForgotPassword(userId, password) {
+  public static generateForgotPassword(userId: string, password: string) {
     this.token = jwt.sign({ data: userId }, password, {
       expiresIn: '30 minutes',
     });
     return this.token;
-  }
-
-  public static verifyForgorPassword(
-    tokenVer,
-    password,
-  ): Promise<{ data: number }> {
-    let token = tokenVer;
-    return new Promise((resolve, reject) => {
-      token = token.replace(/^Bearer\s/, '');
-      try {
-        const resultado = jwt.verify(token, password, (err, tokenDb) => {
-          if (err) {
-            reject(`Token deprecated. Detail ${err}`);
-          } else {
-            // this.currentUser = token.data;
-            resolve(tokenDb);
-          }
-        });
-      } catch (e) {
-        reject(`User not autenticated. Detail ${e}`);
-      }
-      reject('User not autenticated');
-    });
   }
 
   public static getStrategy() {
@@ -92,7 +57,7 @@ export class TokenManagement {
     );
   }
 
-  public static verifyToken(tokenVer): Promise<any> {
+  public static verifyToken(tokenVer: string): Promise<any> {
     let token = tokenVer;
     return new Promise((resolve, reject) => {
       token = token.replace(/^Bearer\s/, '');
@@ -111,7 +76,7 @@ export class TokenManagement {
     });
   }
 
-  public static async renovarToken(tokenRen): Promise<string> {
+  public static async renovarToken(tokenRen: string): Promise<string> {
     let token = tokenRen;
     token = token.replace(/^Bearer\s/, '');
     const userId = (await TokenManagement.verifyToken(token)).data;
@@ -120,7 +85,7 @@ export class TokenManagement {
     return this.token;
   }
 
-  public static decodeJWT(token) {
+  public static decodeJWT(token: string) {
     const decoded = jwt.decode(token);
     console.log(decoded);
     return decoded;

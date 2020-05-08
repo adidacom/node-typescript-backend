@@ -38,10 +38,6 @@ export class UserService {
       where: [{ email }],
     });
 
-    if (!user) {
-      throw Boom.notFound('Could not find a user with this userId');
-    }
-
     return user;
   }
 

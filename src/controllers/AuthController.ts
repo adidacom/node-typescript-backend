@@ -34,7 +34,7 @@ export class AuthController {
 
     return res.send({
       success: true,
-      user,
+      user: { id: user.id, email: user.email },
       token: `Bearer ${TokenManagement.generateToken(user.id)}`,
     });
   }
@@ -60,7 +60,7 @@ export class AuthController {
 
     return res.send({
       success: true,
-      user,
+      user: { id: user.id, email: user.email },
       token: `Bearer ${TokenManagement.generateToken(user.id)}`,
     });
   }

@@ -6,7 +6,7 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import bunyanMiddleware from 'express-bunyan-logger';
 import helmet from 'helmet';
-import * as passport from 'passport';
+import passport from 'passport';
 import {
   useExpressServer,
   useContainer as routingUseContainer,

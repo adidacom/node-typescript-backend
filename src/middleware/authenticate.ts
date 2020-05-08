@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Request, Response, NextFunction } from 'express';
-import * as passport from 'passport';
+import passport from 'passport';
 import { ExpressMiddlewareInterface } from 'routing-controllers';
 
 export class Authenticate implements ExpressMiddlewareInterface {
