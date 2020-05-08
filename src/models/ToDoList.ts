@@ -1,28 +1,36 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
-import { ToDoItem } from "./ToDoItem";
-import { User } from "./User";
+import { ToDoItem } from './ToDoItem';
+import { User } from './User';
 
 @Entity()
 export class ToDoList {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    userId: string;
+  @Column()
+  userId: string;
 
-    @Column()
-    title: string;
+  @Column()
+  title: string;
 
-    @OneToMany(() => ToDoItem, toDoItem => toDoItem.toDoList)
-    toDoItems: ToDoItem[];
+  @OneToMany(() => ToDoItem, (toDoItem) => toDoItem.toDoList)
+  toDoItems: ToDoItem[];
 
-    @ManyToOne(() => User)
-    user: User;
+  @ManyToOne(() => User)
+  user: User;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @CreateDateColumn()
+  createdAt: Date;
 
-    @UpdateDateColumn()
-    updatedAt: Date;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

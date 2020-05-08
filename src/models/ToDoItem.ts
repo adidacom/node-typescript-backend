@@ -1,24 +1,31 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
-import { ToDoList } from "./ToDoList";
+import { ToDoList } from './ToDoList';
 
 @Entity()
 export class ToDoItem {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    description: string;
+  @Column()
+  description: string;
 
-    @Column({ default: false })
-    completed: boolean;
+  @Column({ default: false })
+  completed: boolean;
 
-    @ManyToOne(() => ToDoList, { onDelete: 'CASCADE' })
-    toDoList: ToDoList;
+  @ManyToOne(() => ToDoList, { onDelete: 'CASCADE' })
+  toDoList: ToDoList;
 
-    @CreateDateColumn()
-    createdAt: Date;
+  @CreateDateColumn()
+  createdAt: Date;
 
-    @UpdateDateColumn()
-    updatedAt: Date;
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
