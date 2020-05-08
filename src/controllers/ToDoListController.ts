@@ -61,7 +61,6 @@ export class ToDoListController {
       title: req.body.title,
       items: req.body.items,
     });
-
     const list = await this.toDoListService.createToDoListForUser(
       req.user.id,
       title,

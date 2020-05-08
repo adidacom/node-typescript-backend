@@ -50,7 +50,7 @@ export class TokenManagement {
       },
       (payload, done) => {
         if (payload.data) {
-          return done(null, { data: payload.data });
+          return done(null, { id: payload.data });
         }
         return done({ error: 'User not autenticated' }, null);
       },

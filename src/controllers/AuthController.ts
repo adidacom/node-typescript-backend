@@ -16,13 +16,25 @@ export class AuthController {
     @Req() req: Request,
     @Res() res: Response,
   ): Promise<Response<unknown>> {
-    const { email, password } = await Joi.object({
-      email: Joi.string(),
-      password: Joi.string(),
+    const { email, password, repeatPassword } = await Joi.object({
+      email: Joi.string().email().required(),
+      password: Joi.string()
+        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+        .min(6)
+        .required(),
+      repeatPassword: Joi.string()
+        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+        .min(6)
+        .required(),
     }).validateAsync({
       email: req.body.email,
       password: req.body.password,
+      repeatPassword: req.body.repeatPassword,
     });
+
+    if (password != repeatPassword) {
+      throw Boom.forbidden('User password does not match!');
+    }
 
     const isUserExist = await this.userService.getUserWithEmail(email);
 
@@ -45,8 +57,11 @@ export class AuthController {
     @Res() res: Response,
   ): Promise<Response<unknown>> {
     const { email, password } = await Joi.object({
-      email: Joi.string(),
-      password: Joi.string(),
+      email: Joi.string().email().required(),
+      password: Joi.string()
+        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
+        .min(6)
+        .required(),
     }).validateAsync({
       email: req.body.email,
       password: req.body.password,
